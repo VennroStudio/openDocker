@@ -14,7 +14,6 @@ main() {
     echo ""
     echo " 1 │ Список проектов"
     echo " 2 │ Создать проект"
-    echo " 3 │ Редактировать проект"
     echo " 4 │ Удалить проект"
     echo ""
     echo -e " ${RED}0${NC} │ Вернуться назад"
@@ -25,7 +24,6 @@ main() {
     case "$choice" in
       1) bash "$SCRIPT_DIR/../Command/List.sh" ;;
       2) bash "$SCRIPT_DIR/../Command/Create.sh" ;;
-      3) bash "$SCRIPT_DIR/../Command/Edit.sh" ;;
       4) bash "$SCRIPT_DIR/../Command/Delete.sh" ;;
       0) return ;;
     esac

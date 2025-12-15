@@ -36,20 +36,7 @@ main() {
   done
   [[ "$mariadb_version" == "0" ]] && return
 
-  read -rp " SSH host: " ssh_host
-  [[ "$ssh_host" == "0" ]] && return
-
-  read -rp " SSH user: " ssh_user
-  [[ "$ssh_user" == "0" ]] && return
-
-  read -rp " SSH password: " ssh_password
-  [[ "$ssh_password" == "0" ]] && return
-
-  read -rp " SSH port (по умолчанию 22): " ssh_port
-  [[ -z "$ssh_port" ]] && ssh_port=22
-  [[ "$ssh_port" == "0" ]] && return
-
-  project_create "$name" "$mariadb_version" "$ssh_host" "$ssh_user" "$ssh_password" "$ssh_port" || {
+  project_create_basic "$name" "$mariadb_version" || {
     echo ""
     echo -e " ${RED}✗ Ошибка при создании проекта${NC}"
     echo ""

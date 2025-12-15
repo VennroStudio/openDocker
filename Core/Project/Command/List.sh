@@ -10,20 +10,41 @@ LIST_DESC="Все доступные проекты"
 
 main() {
   clear_screen
-  echo ""
-  draw_header "$LIST_TITLE" "$LIST_DESC"
-  echo ""
+  while true; do
+    echo ""
+    draw_header "$LIST_TITLE" "$LIST_DESC"
+    echo ""
 
-  printf '%s\n' " NAME       mariadb_version"
-  printf '%s\n' "---------------------------"
+    printf '%s\n' " NAME       mariadb_version"
+    printf '%s\n' "---------------------------"
 
-  project_list | while IFS=$'\t' read -r name mariadb_version; do
-    line=$(printf " %s\t%s" "$name" "$mariadb_version")
-    printf '%s\n' "$line"
+    project_list | while IFS=$'\t' read -r name mariadb_version; do
+      line=$(printf " %s\t%s" "$name" "$mariadb_version")
+      printf '%s\n' "$line"
+    done
+
+    echo ""
+    echo -e " ${RED}0${NC} │ Вернуться назад"
+    echo ""
+
+    read -rp " Введите name проекта для редактирования (или 0 для выхода): " selected_name
+
+    if [[ "$selected_name" == "0" || -z "$selected_name" ]]; then
+      return
+    fi
+
+    if ! project_exists "$selected_name"; then
+      echo ""
+      echo -e " ${RED}✗ Проект с name \"$selected_name\" не найден${NC}"
+      echo ""
+      read -rp "Нажмите Enter для продолжения..."
+      clear_screen
+      continue
+    fi
+
+    bash "$SCRIPT_DIR/../Menu/ProjectEditMenu.sh" "$selected_name"
+    clear_screen
   done
-
-  echo ""
-  read -rp "Нажмите Enter для продолжения..."
 }
 
 main
