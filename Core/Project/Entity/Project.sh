@@ -47,6 +47,7 @@ project_create() {
     '. + {($name): {
       name: $name,
       mariadb_version: $mariadb_version,
+      status: true,
       ssh: {
         host: $ssh_host,
         user: $ssh_user,
@@ -137,8 +138,28 @@ project_list() {
 
   "$JQ_BIN" -r '
     to_entries[]
-    | "\(.key)\t\(.value.mariadb_version)"
+    | "\(.key)\t\(.value.mariadb_version)\t\(.value.status)"
   ' "$PROJECTS_FILE"
+}
+
+project_get_status() {
+  local name="$1"
+  "$JQ_BIN" -r --arg name "$name" '.[$name].status' "$PROJECTS_FILE"
+}
+
+project_toggle_status() {
+  local name="$1"
+
+  project_ensure_file
+
+  "$JQ_BIN" \
+    --arg name "$name" \
+    '
+    .[$name].status = (if .[$name].status == true then false else true end)
+    ' \
+    "$PROJECTS_FILE" > "${PROJECTS_FILE}.tmp"
+
+  mv "${PROJECTS_FILE}.tmp" "$PROJECTS_FILE"
 }
 
 project_get() {

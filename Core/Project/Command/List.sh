@@ -15,11 +15,16 @@ main() {
     draw_header "$LIST_TITLE" "$LIST_DESC"
     echo ""
 
-    printf '%s\n' " NAME       mariadb_version"
-    printf '%s\n' "---------------------------"
+    printf '%s\n' " NAME       mariadb_version   STATUS"
+    printf '%s\n' "------------------------------------"
 
-    project_list | while IFS=$'\t' read -r name mariadb_version; do
-      line=$(printf " %s\t%s" "$name" "$mariadb_version")
+    project_list | while IFS=$'\t' read -r name mariadb_version status; do
+      if [[ "$status" == "true" ]]; then
+        status_label="Включен"
+      else
+        status_label="Отключен"
+      fi
+      line=$(printf " %s\t%s\t%s" "$name" "$mariadb_version" "$status_label")
       printf '%s\n' "$line"
     done
 

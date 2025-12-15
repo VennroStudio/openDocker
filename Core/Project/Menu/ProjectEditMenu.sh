@@ -25,14 +25,25 @@ main() {
   fi
 
   while true; do
+    local status status_label toggle_label
+    status="$(project_get_status "$project_name")"
+    if [[ "$status" == "true" ]]; then
+      status_label="Статус: Включен"
+      toggle_label="Отключить проект"
+    else
+      status_label="Статус: Отключен"
+      toggle_label="Включить проект"
+    fi
+
     clear_screen
     echo ""
-    draw_header "$PROJECT_EDIT_MENU_TITLE" "Проект: $project_name"
+    draw_header "$PROJECT_EDIT_MENU_TITLE" "Проект: $project_name • $status_label"
     echo ""
-    echo " 1 │ Редактировать основную информацию (name, mariadb_version)"
-    echo " 2 │ Редактировать SSH"
-    echo " 3 │ Редактировать database"
-    echo " 4 │ Редактировать path dumps"
+    echo " 1 │ $toggle_label"
+    echo " 2 │ Редактировать основную информацию (name, mariadb_version)"
+    echo " 3 │ Редактировать SSH"
+    echo " 4 │ Редактировать database"
+    echo " 5 │ Редактировать path dumps"
     echo ""
     echo -e " ${RED}0${NC} │ Вернуться к списку проектов"
     echo ""
@@ -41,6 +52,9 @@ main() {
 
     case "$choice" in
       1)
+        project_toggle_status "$project_name"
+        ;;
+      2)
         export PROJECT_EDIT_NAME_FILE="$tmp_name_file"
         bash "$SCRIPT_DIR/../Command/EditBasic.sh" "$project_name"
         if [[ -f "$tmp_name_file" ]]; then
@@ -52,9 +66,9 @@ main() {
           fi
         fi
         ;;
-      2) bash "$SCRIPT_DIR/../Command/EditSsh.sh" "$project_name" ;;
-      3) bash "$SCRIPT_DIR/../Command/EditDatabase.sh" "$project_name" ;;
-      4) bash "$SCRIPT_DIR/../Command/EditDumps.sh" "$project_name" ;;
+      3) bash "$SCRIPT_DIR/../Command/EditSsh.sh" "$project_name" ;;
+      4) bash "$SCRIPT_DIR/../Command/EditDatabase.sh" "$project_name" ;;
+      5) bash "$SCRIPT_DIR/../Command/EditDumps.sh" "$project_name" ;;
       0) return ;;
     esac
   done

@@ -1,0 +1,30 @@
+version: '3.9'
+
+name: vennro-mariadb-{{VERSION}}
+
+services:
+  db:
+    image: mariadb:{{VERSION}}
+    container_name: mariadb-{{VERSION}}-container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "{{PORT}}:3306"
+    volumes:
+      - mariadb-{{VERSION}}-/var/lib/mysql
+      - ../../config/mysql.cnf:/etc/mysql/conf.d/config.cnf
+    networks:
+      - mariadb-public
+      - proxy
+
+volumes:
+  mariadb-{{VERSION}}-
+    name: mariadb-{{VERSION}}-data
+
+networks:
+  mariadb-public:
+    external: true
+  proxy:
+    external: true
