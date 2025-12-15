@@ -40,7 +40,7 @@ main() {
     draw_header "$PROJECT_EDIT_MENU_TITLE" "Проект: $project_name • $status_label"
     echo ""
     echo " 1 │ $toggle_label"
-    echo " 2 │ Редактировать основную информацию (name, mariadb_version)"
+    echo " 2 │ Редактировать основную информацию"
     echo " 3 │ Редактировать SSH"
     echo " 4 │ Редактировать database"
     echo " 5 │ Редактировать path dumps"
